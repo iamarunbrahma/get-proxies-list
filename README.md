@@ -5,7 +5,7 @@ This script is built using Python and FastAPI.
 
 While using requests library, just pass each proxy as :
 
-`
-proxies = {"https": proxy}
+```
+proxies = {"https": proxy}  
 requests.get(url, proxies=proxies, timeout=10)
-`
+```
