@@ -1,4 +1,4 @@
 # Get free proxies
-If you are working on web scraping project and you need to use proxies to scrape data as your IP has been blocked for scraping purposes. Don't worry, simply use this API to get a list of free proxies from the internet.
-
-This script is built using Python and FastAPI.
+This script can be used to scrape a list of free proxies available in the internet. This script is built using Python and FastAPI.<br>
+Script is also publicly hosted here: [proxies-api](https://proxies-api.onrender.com/). You can extract contents from this link using `requests` library.<br>
+This script is updated every 5 minutes to get new proxy lists.
