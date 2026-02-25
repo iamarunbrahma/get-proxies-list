@@ -149,7 +149,8 @@ async def _fetch_clearproxy_single(
     proxies: list[Proxy] = []
     for entry in data:
         try:
-            speed = entry.get("speed_ms")
+            speed_raw = entry.get("speed_ms")
+            speed = float(speed_raw) if speed_raw is not None else None
             if speed is not None and speed > MAX_RESPONSE_TIME_MS:
                 continue
 
@@ -157,8 +158,10 @@ async def _fetch_clearproxy_single(
             port = int(entry["port"])
             anonymity = _normalize_anonymity(entry.get("anonymity"))
             country = entry.get("country_code")
-            verified_targets = entry.get("valid_urls")
-            if isinstance(verified_targets, list) and not verified_targets:
+            raw_targets = entry.get("valid_urls")
+            if isinstance(raw_targets, list) and raw_targets:
+                verified_targets = list(dict.fromkeys(raw_targets))
+            else:
                 verified_targets = None
 
             proxies.append(Proxy(
@@ -168,7 +171,7 @@ async def _fetch_clearproxy_single(
                 anonymity=anonymity,
                 country=country,
                 proxy_url=_build_proxy_url(protocol, ip, port),
-                speed_ms=float(speed) if speed is not None else None,
+                speed_ms=speed,
                 verified_targets=verified_targets,
             ))
         except (KeyError, ValueError, TypeError):
