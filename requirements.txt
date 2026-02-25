@@ -1,5 +1,3 @@
-bs4
 fastapi
-lxml
-requests
-uvicorn
+uvicorn[standard]
+httpx
