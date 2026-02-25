@@ -36,8 +36,7 @@ Returns a list of proxies, sorted by quality score (best first).
       "speed_ms": 340.0,
       "reliability": 0.94,
       "source_count": 2,
-      "quality_score": 0.78,
-      "verified_targets": ["https://www.google.com/"]
+      "quality_score": 0.78
     }
   ],
   "count": 1,
@@ -105,7 +104,6 @@ Each proxy gets a composite quality score (0.0-1.0) based on:
 - **Reliability** (0-0.3): Uptime ratio from upstream monitoring
 - **Speed** (0-0.2): Response time — faster proxies score higher
 - **Anonymity** (0-0.1): Elite > Anonymous > Transparent
-- **Verified targets** (0-0.1): Bonus for proxies validated against specific websites
 
 ## Self-Hosting
 

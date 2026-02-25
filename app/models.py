@@ -30,7 +30,6 @@ class Proxy(BaseModel):
     reliability: float | None = None
     source_count: int = 1
     quality_score: float = 0.0
-    verified_targets: list[str] | None = None
 
 
 class FiltersApplied(BaseModel):

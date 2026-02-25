@@ -158,11 +158,6 @@ async def _fetch_clearproxy_single(
             port = int(entry["port"])
             anonymity = _normalize_anonymity(entry.get("anonymity"))
             country = entry.get("country_code")
-            raw_targets = entry.get("valid_urls")
-            if isinstance(raw_targets, list) and raw_targets:
-                verified_targets = list(dict.fromkeys(raw_targets))
-            else:
-                verified_targets = None
 
             proxies.append(Proxy(
                 ip=ip,
@@ -172,7 +167,6 @@ async def _fetch_clearproxy_single(
                 country=country,
                 proxy_url=_build_proxy_url(protocol, ip, port),
                 speed_ms=speed,
-                verified_targets=verified_targets,
             ))
         except (KeyError, ValueError, TypeError):
             continue
@@ -212,7 +206,6 @@ def _merge_and_deduplicate(all_proxies: list[Proxy]) -> list[Proxy]:
         # Merge: pick best metadata from all sources
         best_speed: float | None = None
         best_reliability: float | None = None
-        all_targets: list[str] = []
         best_anonymity = base.anonymity
 
         for p in group:
@@ -222,15 +215,11 @@ def _merge_and_deduplicate(all_proxies: list[Proxy]) -> list[Proxy]:
             if p.reliability is not None:
                 if best_reliability is None or p.reliability > best_reliability:
                     best_reliability = p.reliability
-            if p.verified_targets:
-                all_targets.extend(p.verified_targets)
             if p.anonymity and (
                 best_anonymity is None
                 or _anon_rank(p.anonymity) > _anon_rank(best_anonymity)
             ):
                 best_anonymity = p.anonymity
-
-        unique_targets = list(dict.fromkeys(all_targets)) if all_targets else None
 
         proxy = Proxy(
             ip=base.ip,
@@ -242,7 +231,6 @@ def _merge_and_deduplicate(all_proxies: list[Proxy]) -> list[Proxy]:
             speed_ms=best_speed,
             reliability=best_reliability,
             source_count=source_count,
-            verified_targets=unique_targets,
         )
         proxy.quality_score = compute_quality_score(proxy)
         merged.append(proxy)

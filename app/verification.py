@@ -10,7 +10,7 @@ from app.models import Proxy
 
 
 def compute_quality_score(proxy: Proxy) -> float:
-    """Composite quality score (0.0-1.0) from reliability, speed, source count, anonymity, and verified targets."""
+    """Composite quality score (0.0-1.0) from reliability, speed, source count, and anonymity."""
     score = 0.0
 
     # Source count bonus (0.0 - 0.3): more sources = more trustworthy
@@ -27,10 +27,6 @@ def compute_quality_score(proxy: Proxy) -> float:
     # Anonymity bonus (0.0 - 0.1)
     anon_scores = {"elite": 0.1, "anonymous": 0.06, "transparent": 0.02}
     score += anon_scores.get(proxy.anonymity or "", 0.0)
-
-    # Verified targets bonus (0.0 - 0.1)
-    if proxy.verified_targets:
-        score += min(len(proxy.verified_targets) * 0.02, 0.1)
 
     return round(min(score, 1.0), 3)
 
